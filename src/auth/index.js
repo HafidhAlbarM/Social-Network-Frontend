@@ -1,5 +1,5 @@
 export const signup = user => {
-    return fetch("http://localhost:8081/user", {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/signup`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -14,7 +14,7 @@ export const signup = user => {
 }
 
 export const signin = user => {
-    return fetch("http://localhost:8081/user/signin", {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/signin`, {
         method: "POST",
         headers: {
             Accept: "application/json",
@@ -52,7 +52,7 @@ export const signout = (next) => {
     //window utk cek apakah ada objek window utk nantinya akses localStorage
     if(typeof window !== "undefined") localStorage.removeItem("jwt");
     next();
-    return fetch("http://localhost:8081/user/signout", {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/signout`, {
         method: "GET"
     })
     .then(response => {

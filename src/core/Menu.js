@@ -27,12 +27,21 @@ const Menu = ({history}) => {
                 {isAuthenticated() &&
                     <Fragment>
                         <li className="nav-item">
-                            <a className="nav-link" >
-                                {isAuthenticated().user.name}
-                            </a>
+                            <Link className="nav-link"
+                                to="/users"
+                                style={isActive(history, `/users`)}
+                            >USERS</Link>
                         </li>
                         <li className="nav-item">
-                            <a 
+                            <Link className="nav-link"
+                                to={`/user/${isAuthenticated().user.id}`}
+                                style={isActive(history, `/user/${isAuthenticated().user.id}`)}
+                            >
+                                {`${isAuthenticated().user.name}'s Profile`}
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <span 
                                 className="nav-link" 
                                 style={
                                     (isActive(history, "/signout"), 
@@ -42,7 +51,7 @@ const Menu = ({history}) => {
                                     history.push("/signin")
                                 })}>
                                 Sign Out
-                            </a>
+                            </span>
                         </li>
                     </Fragment>
                 }
