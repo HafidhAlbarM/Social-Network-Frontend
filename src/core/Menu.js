@@ -14,6 +14,12 @@ const Menu = ({history}) => {
                 <li className="nav-item">
                     <Link className="nav-link" style={isActive(history, "/")} to="/">Home</Link>
                 </li>
+                <li className="nav-item">
+                    <Link className="nav-link"
+                        to="/users"
+                        style={isActive(history, `/users`)}
+                    >USERS</Link>
+                </li>
                 {!isAuthenticated() &&
                     <Fragment>
                         <li className="nav-item">
@@ -26,12 +32,6 @@ const Menu = ({history}) => {
                 }
                 {isAuthenticated() &&
                     <Fragment>
-                        <li className="nav-item">
-                            <Link className="nav-link"
-                                to="/users"
-                                style={isActive(history, `/users`)}
-                            >USERS</Link>
-                        </li>
                         <li className="nav-item">
                             <Link className="nav-link"
                                 to={`/user/${isAuthenticated().user.id}`}

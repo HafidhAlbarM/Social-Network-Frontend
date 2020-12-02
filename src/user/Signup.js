@@ -19,29 +19,53 @@ class Signup extends Component {
         this.setState({ [name]: event.target.value });
     }
 
+    isValid = () => {
+        const {name, email, password} = this.state;
+
+        if(name.length==0){
+            this.setState({error:"Name is required"});
+            return false
+        }
+        if(email.length==0){
+            this.setState({error:"Email is required"});
+            return false
+        }
+        if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+            this.setState({error:"a valid Email is required"});
+            return false
+        }
+        if(password.length==0){
+            this.setState({error:"Password is required"});
+            return false
+        }
+        return true;
+    }
+
     clickSubmit = event => {
         event.preventDefault();
-        const {name, email, password} = this.state;
-        const user = {
-            name: name,
-            email: email,
-            password: password
-        };
+        if(this.isValid()){
+            const {name, email, password} = this.state;
+            const user = {
+                name: name,
+                email: email,
+                password: password
+            };
 
-        signup(user)
-        .then(data => {
-            if(data.error){
-                this.setState({error: data.error});
-            }else{
-                this.setState({
-                    name: "",
-                    email: "",
-                    password: "",
-                    error: "",
-                    message: data.message
-                })
-            }
-        });
+            signup(user)
+            .then(data => {
+                if(data.error){
+                    this.setState({error: data.error});
+                }else{
+                    this.setState({
+                        name: "",
+                        email: "",
+                        password: "",
+                        error: "",
+                        message: data.message
+                    })
+                }
+            });
+        }
     }
 
     signupForm = (name, email, password) => (

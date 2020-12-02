@@ -45,28 +45,54 @@ class EditProfile extends Component {
         this.setState({ [name]: event.target.value });
     }
 
-    clickSubmit = event => {
-        event.preventDefault();
+    isValid = () => {
         const {name, email, password} = this.state;
 
-        const user = {
-            name: name,
-            email: email,
-            password: password || undefined
-        };
-        const userId = this.props.match.params.userId;
-        const token = isAuthenticated().token;
+        if(name.length == 0){
+            this.setState({error: "Name is required"});
+            return false;
+        }
+        if(email.length == 0){
+            this.setState({error: "Email is required"});
+            return false;
+        }
+        if(!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
+            this.setState({error: "a valid Email is required"});
+            return false;
+        }
+        if(password.length >= 1 && password <= 5){
+            this.setState({error: "password must be at least 6 characters long"});
+            return false;
+        }
+        return true;
+    }
 
-        update(userId, token, user)
-        .then(data => {
-            if(data.error){
-                this.setState({error: data.error});
-            }else{
-                this.setState({
-                    redirectToProfile: true
-                })
-            }
-        });
+    clickSubmit = event => {
+        event.preventDefault();
+
+        if(this.isValid()){
+            const {name, email, password} = this.state;
+
+            const user = {
+                name: name,
+                email: email,
+                password: password || undefined
+            };
+
+            const userId = this.props.match.params.userId;
+            const token = isAuthenticated().token;
+    
+            update(userId, token, user)
+            .then(data => {
+                if(data.error){
+                    this.setState({error: data.error});
+                }else{
+                    this.setState({
+                        redirectToProfile: true
+                    })
+                }
+            });
+        }
     }
 
     signupForm = (name, email, password) => (
