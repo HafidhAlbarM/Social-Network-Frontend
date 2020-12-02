@@ -35,9 +35,13 @@ class Profile extends Component{
         this.init(userId);
     }
 
-    componentDidUpdate(props){
-        const userId = props.match.params.userId;
-        this.init(userId);
+    componentDidUpdate(prevProps){
+        let userIdPrev = prevProps.match.params.userId;
+        let userIdCurrent = this.props.match.params.userId;
+
+        if(userIdPrev !== userIdCurrent){
+            this.init(this.props.match.params.userId);
+        }
     }
 
     render(){
@@ -73,7 +77,7 @@ class Profile extends Component{
                                 >   
                                     Edit Profile
                                 </Link>
-                                <DeleteUser/>
+                                <DeleteUser userId={user.id}/>
                             </div>
                         )
                     }
