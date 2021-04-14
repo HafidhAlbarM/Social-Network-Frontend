@@ -69,11 +69,11 @@ class EditProfile extends Component {
       return false;
     }
     if (name.length === 0) {
-      this.setState({ error: "Name is required" });
+      this.setState({ error: "Name is required", loading: false });
       return false;
     }
     if (email.length === 0) {
-      this.setState({ error: "Email is required" });
+      this.setState({ error: "Email is required", loading: false });
       return false;
     }
     if (
