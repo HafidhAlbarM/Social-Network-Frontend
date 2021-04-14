@@ -90,6 +90,7 @@ class EditProfile extends Component {
     }
     if (about != null && about.length > 80) {
       this.setState({ error: "about cannot more than 80 characters" });
+      return false;
     }
     return true;
   };

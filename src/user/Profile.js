@@ -62,7 +62,8 @@ class Profile extends Component {
             <img
               style={{ height: "200px", width: "auto" }}
               className="img-thumbnail"
-              src={photoUrl}
+              src={`${process.env.REACT_APP_API_URL}/user/photo/${user.id}`}
+              //src={photoUrl} pake ini juga bisa
               onError={(i) => (i.target.src = `${Ava}`)}
               alt={user.id}
             />
