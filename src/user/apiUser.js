@@ -55,6 +55,38 @@ export const remove = (userId, token) => {
     .catch((err) => console.log(err));
 };
 
+export const follow = (userId, token, followId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/user/follow`, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({userId, following_id: followId}),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const unFollow = (userId, token, followId) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/user/unfollow`, {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({userId, unfollow_id: followId}),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
 export const updateUserLocalStorage = (responseAPI, next) => {
   if (typeof window != "undefined") {
     if (localStorage.getItem("jwt")) {

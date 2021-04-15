@@ -4,14 +4,40 @@ import { isAuthenticated } from "../auth/";
 import { read } from "../user/apiUser";
 import Ava from "../images/ava.png";
 import DeleteUser from "./DeleteUser";
+import FollowProfileButton from "./FollowProfileButton";
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      user: "",
+      user: {following: [], followers: []},
       redirectToSignIn: false,
+      isFollowing: false,
+      error: ""
     };
+  }
+
+  checkFollow = user => {
+    const jwt = isAuthenticated();
+    const match = user.followers.find(follower => {
+      return follower.follower_id === jwt.user.id
+    });
+    
+    return match;
+  }
+
+  clickFollowButton = callApi => {
+    const userId = isAuthenticated().user.id;
+    const token = isAuthenticated().token;
+
+    callApi(userId, token, this.state.user.id)
+    .then(data => {
+      if(data.error){
+        this.setState({error: data.error});
+      }else{
+        this.setState({user: data, isFollowing: !this.state.isFollowing});
+      }
+    })
   }
 
   init = (userId) => {
@@ -20,7 +46,8 @@ class Profile extends Component {
       if (data.error) {
         this.setState({ redirectToSignIn: true });
       } else {
-        this.setState({ user: data });
+        let isFollowing = this.checkFollow(data);
+        this.setState({ user: data, isFollowing: isFollowing != undefined ? true : false });
       }
     });
   };
@@ -74,7 +101,7 @@ class Profile extends Component {
               <p>Email: {user.email}</p>
               <p>Joined: {new Date(user.created_at).toDateString()}</p>
             </div>
-            {isAuthenticated().user && isAuthenticated().user.id === user.id && (
+            {isAuthenticated().user && isAuthenticated().user.id === user.id ? (
               <div className="d-inline-block">
                 <Link
                   className="btn btn-raised btn-success mr-5"
@@ -84,6 +111,13 @@ class Profile extends Component {
                 </Link>
                 <DeleteUser userId={user.id} />
               </div>
+            ) : (
+              <p>
+                <FollowProfileButton 
+                  following = {this.state.isFollowing}
+                  onButtonClick = {this.clickFollowButton}
+                />
+              </p>
             )}
           </div>
         </div>
