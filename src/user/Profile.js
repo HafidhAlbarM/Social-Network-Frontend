@@ -5,40 +5,40 @@ import { read } from "../user/apiUser";
 import Ava from "../images/ava.png";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
+import ProfileTabs from "./ProfileTabs";
 
 class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      user: {following: [], followers: []},
+      user: { following: [], followers: [] },
       redirectToSignIn: false,
       isFollowing: false,
-      error: ""
+      error: "",
     };
   }
 
-  checkFollow = user => {
+  checkFollow = (user) => {
     const jwt = isAuthenticated();
-    const match = user.followers.find(follower => {
-      return follower.follower_id === jwt.user.id
+    const match = user.followers.find((follower) => {
+      return follower.follower_id === jwt.user.id;
     });
-    
-    return match;
-  }
 
-  clickFollowButton = callApi => {
+    return match;
+  };
+
+  clickFollowButton = (callApi) => {
     const userId = isAuthenticated().user.id;
     const token = isAuthenticated().token;
 
-    callApi(userId, token, this.state.user.id)
-    .then(data => {
-      if(data.error){
-        this.setState({error: data.error});
-      }else{
-        this.setState({user: data, isFollowing: !this.state.isFollowing});
+    callApi(userId, token, this.state.user.id).then((data) => {
+      if (data.error) {
+        this.setState({ error: data.error });
+      } else {
+        this.setState({ user: data, isFollowing: !this.state.isFollowing });
       }
-    })
-  }
+    });
+  };
 
   init = (userId) => {
     const token = isAuthenticated().token;
@@ -47,7 +47,10 @@ class Profile extends Component {
         this.setState({ redirectToSignIn: true });
       } else {
         let isFollowing = this.checkFollow(data);
-        this.setState({ user: data, isFollowing: isFollowing != undefined ? true : false });
+        this.setState({
+          user: data,
+          isFollowing: isFollowing != undefined ? true : false,
+        });
       }
     });
   };
@@ -113,12 +116,17 @@ class Profile extends Component {
               </div>
             ) : (
               <p>
-                <FollowProfileButton 
-                  following = {this.state.isFollowing}
-                  onButtonClick = {this.clickFollowButton}
+                <FollowProfileButton
+                  following={this.state.isFollowing}
+                  onButtonClick={this.clickFollowButton}
                 />
               </p>
             )}
+            <hr></hr>
+            <ProfileTabs
+              followers={user.followers}
+              following={user.following}
+            />
           </div>
         </div>
         <div className="row">

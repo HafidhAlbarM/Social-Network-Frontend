@@ -63,7 +63,7 @@ export const follow = (userId, token, followId) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({userId, following_id: followId}),
+    body: JSON.stringify({ userId, following_id: followId }),
   })
     .then((response) => {
       return response.json();
@@ -79,7 +79,7 @@ export const unFollow = (userId, token, followId) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({userId, unfollow_id: followId}),
+    body: JSON.stringify({ userId, unfollow_id: followId }),
   })
     .then((response) => {
       return response.json();
