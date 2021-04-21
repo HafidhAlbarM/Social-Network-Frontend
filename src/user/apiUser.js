@@ -98,3 +98,18 @@ export const updateUserLocalStorage = (responseAPI, next) => {
     }
   }
 };
+
+export const findpeople = (userId, token) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/users/findpeople/${userId}`, {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      "Content-Type": "appliaction/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};

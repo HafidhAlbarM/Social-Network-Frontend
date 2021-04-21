@@ -22,11 +22,11 @@ class Signup extends Component {
   isValid = () => {
     const { name, email, password } = this.state;
 
-    if (name.length == 0) {
+    if (name.length === 0) {
       this.setState({ error: "Name is required" });
       return false;
     }
-    if (email.length == 0) {
+    if (email.length === 0) {
       this.setState({ error: "Email is required" });
       return false;
     }
@@ -38,7 +38,7 @@ class Signup extends Component {
       this.setState({ error: "a valid Email is required" });
       return false;
     }
-    if (password.length == 0) {
+    if (password.length === 0) {
       this.setState({ error: "Password is required" });
       return false;
     }

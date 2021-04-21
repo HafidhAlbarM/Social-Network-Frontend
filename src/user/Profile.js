@@ -49,7 +49,7 @@ class Profile extends Component {
         let isFollowing = this.checkFollow(data);
         this.setState({
           user: data,
-          isFollowing: isFollowing != undefined ? true : false,
+          isFollowing: isFollowing !== undefined ? true : false,
         });
       }
     });
@@ -74,11 +74,11 @@ class Profile extends Component {
   render() {
     const { redirectToSignIn, user } = this.state;
 
-    const photoUrl = user.id
-      ? `${process.env.REACT_APP_API_URL}/user/photo/${
-          user.id
-        }?${new Date().getTime()}`
-      : Ava;
+    // const photoUrl = user.id
+    //   ? `${process.env.REACT_APP_API_URL}/user/photo/${
+    //       user.id
+    //     }?${new Date().getTime()}`
+    //   : Ava;
 
     if (redirectToSignIn) {
       return <Redirect to="/signin" />;
@@ -123,16 +123,16 @@ class Profile extends Component {
               </p>
             )}
             <hr></hr>
-            <ProfileTabs
-              followers={user.followers}
-              following={user.following}
-            />
           </div>
         </div>
         <div className="row">
           <div className="col-md-12 mb-5 mt-5">
             <hr></hr>
             {user.about}
+            <ProfileTabs
+              followers={user.followers}
+              following={user.following}
+            />
             <hr></hr>
           </div>
         </div>
