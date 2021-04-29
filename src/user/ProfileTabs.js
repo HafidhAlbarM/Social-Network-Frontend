@@ -4,7 +4,7 @@ import DefaultProfile from "../images/ava.png";
 
 class ProfileTabs extends Component {
   render() {
-    const { following, followers } = this.props;
+    const { following, followers, posts } = this.props;
     return (
       <div>
         <div className="row">
@@ -66,6 +66,16 @@ class ProfileTabs extends Component {
           <div className="col-md-4">
             <h3 className="text-primary">Posts</h3>
             <hr />
+
+            {posts.map((post, index) => {
+              return (
+                <div key={index}>
+                  <div>
+                    <Link to={`/post/${post.id}`}>{post.title}</Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

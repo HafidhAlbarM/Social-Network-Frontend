@@ -29,11 +29,11 @@ class Posts extends Component {
             <div className="card col-md-4" key={index}>
               <div className="card-body">
                 <img
-                  style={{ height: "200px", width: "auto" }}
+                  style={{ height: "200px", width: "100%" }}
                   className="img-thumbnail"
-                  src={`${process.env.REACT_APP_API_URL}/user/photo/${post.id}`}
+                  src={`${process.env.REACT_APP_API_URL}/post/photo/${post.id}`}
                   onError={(i) => (i.target.src = `${PostImage}`)}
-                  alt={post.id}
+                  alt={post.title}
                 />
                 <h5 className="card-title">{post.title}</h5>
                 <p className="card-text">
@@ -58,7 +58,9 @@ class Posts extends Component {
     const { posts } = this.state;
     return (
       <div className="container">
-        <h2 className="mt-5 mb-5">Recent Posts</h2>
+        <h2 className="mt-5 mb-5">
+          {!posts.length ? "Loading...." : "Recent Post"}
+        </h2>
 
         {this.renderPosts(posts)}
       </div>

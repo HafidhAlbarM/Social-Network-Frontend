@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { isAuthenticated } from "../auth/";
 import { read } from "../user/apiUser";
+import { listByUser } from "../post/apiPost";
 import Ava from "../images/ava.png";
 import DeleteUser from "./DeleteUser";
 import FollowProfileButton from "./FollowProfileButton";
@@ -15,6 +16,7 @@ class Profile extends Component {
       redirectToSignIn: false,
       isFollowing: false,
       error: "",
+      posts: [],
     };
   }
 
@@ -51,6 +53,18 @@ class Profile extends Component {
           user: data,
           isFollowing: isFollowing !== undefined ? true : false,
         });
+        this.loadPosts(data.id);
+      }
+    });
+  };
+
+  loadPosts = (userId) => {
+    const token = isAuthenticated().token;
+    listByUser(userId, token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ posts: data });
       }
     });
   };
@@ -72,7 +86,7 @@ class Profile extends Component {
   }
 
   render() {
-    const { redirectToSignIn, user } = this.state;
+    const { redirectToSignIn, user, posts } = this.state;
 
     // const photoUrl = user.id
     //   ? `${process.env.REACT_APP_API_URL}/user/photo/${
@@ -115,12 +129,12 @@ class Profile extends Component {
                 <DeleteUser userId={user.id} />
               </div>
             ) : (
-              <p>
+              <div>
                 <FollowProfileButton
                   following={this.state.isFollowing}
                   onButtonClick={this.clickFollowButton}
                 />
-              </p>
+              </div>
             )}
             <hr></hr>
           </div>
@@ -132,6 +146,7 @@ class Profile extends Component {
             <ProfileTabs
               followers={user.followers}
               following={user.following}
+              posts={posts}
             />
             <hr></hr>
           </div>
