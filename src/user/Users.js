@@ -25,23 +25,25 @@ class Users extends Component {
     return (
       <div className="row">
         {users.map((user, index) => (
-          <div className="card col-md-4" key={index}>
-            <div className="card-body">
-              <img
-                style={{ height: "200px", width: "auto" }}
-                className="img-thumbnail"
-                src={`${process.env.REACT_APP_API_URL}/user/photo/${user.id}`}
-                onError={(i) => (i.target.src = `${Ava}`)}
-                alt={user.id}
-              />
-              <h5 className="card-title">{user.name}</h5>
-              <p className="card-text">{user.email}</p>
-              <Link
-                to={`user/${user.id}`}
-                className="btn btn-raised btn-primary btn-sm"
-              >
-                View Profile
-              </Link>
+          <div className="col-md-4">
+            <div className="card" key={index}>
+              <div className="card-body">
+                <img
+                  style={{ height: "200px", width: "auto" }}
+                  className="img-thumbnail"
+                  src={`${process.env.REACT_APP_API_URL}/user/photo/${user.id}`}
+                  onError={(i) => (i.target.src = `${Ava}`)}
+                  alt={user.id}
+                />
+                <h5 className="card-title">{user.name}</h5>
+                <p className="card-text">{user.email}</p>
+                <Link
+                  to={`user/${user.id}`}
+                  className="btn btn-raised btn-primary btn-sm"
+                >
+                  View Profile
+                </Link>
+              </div>
             </div>
           </div>
         ))}

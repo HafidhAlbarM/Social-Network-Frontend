@@ -38,6 +38,13 @@ class SinglePost extends Component {
     });
   };
 
+  deleteComfirmed = () => {
+    let answer = window.confirm("Are you sure you want to delete your account");
+    if (answer) {
+      this.deletePost();
+    }
+  };
+
   renderPost = (post) => {
     return (
       <div className="card-body">
@@ -62,11 +69,14 @@ class SinglePost extends Component {
           {isAuthenticated().user &&
             isAuthenticated().user.id === post.created_by && (
               <div>
-                <button className="btn btn-raised btn-success mr-5">
+                <Link
+                  to={`/post/edit/${post.id}`}
+                  className="btn btn-raised btn-success mr-5"
+                >
                   Edit
-                </button>
+                </Link>
                 <button
-                  onClick={() => this.deletePost()}
+                  onClick={() => this.deleteComfirmed()}
                   className="btn btn-raised btn-danger mr-5"
                 >
                   Delete
