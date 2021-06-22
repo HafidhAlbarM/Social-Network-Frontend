@@ -3,6 +3,7 @@ import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
 import PostImage from "../images/post.jpg";
 import { isAuthenticated } from "../auth/index";
+import Comment from "./Comment";
 
 class SinglePost extends Component {
   constructor() {
@@ -11,10 +12,11 @@ class SinglePost extends Component {
       post: {},
       loading: true,
       redirectToHome: false,
+      redirectToSignIn: false,
       message: "",
       like: false,
       likes: 0,
-      redirectToSignIn: false
+      comments: [],
     };
   }
 
@@ -29,6 +31,7 @@ class SinglePost extends Component {
           loading: false,
           like: this.checkLike(data.post_likes),
           likes: data.post_likes.length,
+          comments: data.post_comments,
         });
       }
     });
@@ -62,14 +65,18 @@ class SinglePost extends Component {
     }
   };
 
+  updateComments = (comments) => {
+    this.setState({ comments });
+  };
+
   likeToggle = () => {
-    if(isAuthenticated()){
+    if (isAuthenticated()) {
       let callAPI = this.state.like ? unlike : like;
 
       const userId = isAuthenticated().user.id;
       const postId = this.state.post.id;
       const token = isAuthenticated().token;
-  
+
       callAPI(userId, token, postId).then((data) => {
         if (data.error) {
           console.log(data.error);
@@ -80,8 +87,8 @@ class SinglePost extends Component {
           });
         }
       });
-    }else{
-      this.setState({redirectToSignIn:true});
+    } else {
+      this.setState({ redirectToSignIn: true });
     }
   };
 
@@ -97,22 +104,30 @@ class SinglePost extends Component {
         />
         {like ? (
           <h3
-          onClick={() => {
-            this.likeToggle();
-          }}
-        >
-          <i className="fa fa-thumbs-up text-info bg-dark" style={{padding:'10px', borderRadius:'50%'}}/> {likes} like
-        </h3>
+            onClick={() => {
+              this.likeToggle();
+            }}
+          >
+            <i
+              className="fa fa-thumbs-up text-info bg-dark"
+              style={{ padding: "10px", borderRadius: "50%" }}
+            />{" "}
+            {likes} like
+          </h3>
         ) : (
           <h3
-          onClick={() => {
-            this.likeToggle();
-          }}
-        >
-          <i className="fa fa-thumbs-up bg-dark" style={{padding:'10px', borderRadius:'50%'}}/> {likes} like
-        </h3>
+            onClick={() => {
+              this.likeToggle();
+            }}
+          >
+            <i
+              className="fa fa-thumbs-up bg-dark"
+              style={{ padding: "10px", borderRadius: "50%" }}
+            />{" "}
+            {likes} like
+          </h3>
         )}
-        
+
         <p className="card-text">{post.body}</p>
         <br />
         <p className="font-italic mark">
@@ -131,13 +146,14 @@ class SinglePost extends Component {
                   to={`/post/edit/${post.id}`}
                   className="btn btn-raised btn-success mr-5"
                 >
-                  Edit
+                  Edit{" "}
+                  <i className="fa fa-pencil-square" aria-hidden="true"></i>
                 </Link>
                 <button
                   onClick={() => this.deleteComfirmed()}
                   className="btn btn-raised btn-danger mr-5"
                 >
-                  Delete
+                  Delete <i className="fa fa-trash" aria-hidden="true"></i>
                 </button>
               </div>
             )}
@@ -147,13 +163,21 @@ class SinglePost extends Component {
   };
 
   render() {
-    const { post, like, likes, loading, redirectToHome, redirectToSignIn } = this.state;
+    const {
+      post,
+      like,
+      likes,
+      comments,
+      loading,
+      redirectToHome,
+      redirectToSignIn,
+    } = this.state;
 
     if (redirectToHome) {
       return <Redirect to="/" />;
-    } else if(redirectToSignIn){
-      return <Redirect to="/signin"/>;
-    }else{
+    } else if (redirectToSignIn) {
+      return <Redirect to="/signin" />;
+    } else {
       return (
         <div className="container">
           {loading ? (
@@ -164,6 +188,11 @@ class SinglePost extends Component {
             <div>
               <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
               {this.renderPost(post, like, likes)}
+              <Comment
+                postId={post.id}
+                comments={comments}
+                updateComments={this.updateComments}
+              />
             </div>
           )}
         </div>

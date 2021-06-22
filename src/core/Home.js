@@ -16,7 +16,8 @@ const Home = () => {
           <div className="row">
             <div className="col-md-2 offset-10">
               <Link to="/post/create" className="btn btn-raised btn-success">
-                New Post
+                New Post{" "}
+                <i className="fa fa-plus-circle" aria-hidden="true"></i>
               </Link>
             </div>
           </div>

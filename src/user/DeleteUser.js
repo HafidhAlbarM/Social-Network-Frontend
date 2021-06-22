@@ -38,7 +38,7 @@ class DeleteUser extends Component {
         className="btn btn-raised btn-danger mr-5"
         onClick={() => this.deleteComfirmed()}
       >
-        Delete Profile
+        Delete Profile <i className="fa fa-trash" aria-hidden="true"></i>
       </button>
     );
   }

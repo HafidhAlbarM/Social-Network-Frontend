@@ -76,7 +76,8 @@ class FindPeople extends Component {
                   onClick={() => this.clickFollow(user, index)}
                   className="btn btn-raised btn-info float-right"
                 >
-                  Follow
+                  Follow{" "}
+                  <i className="fa fa-plus-circle" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
