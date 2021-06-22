@@ -79,3 +79,37 @@ export const remove = (postId, token) => {
       console.log(err);
     });
 };
+
+export const like = (user_id, token, post_id) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/like`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ user_id, post_id }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+export const unlike = (user_id, token, post_id) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/post/unlike/${post_id}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ user_id, post_id }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

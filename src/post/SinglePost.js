@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { singlePost, remove } from "./apiPost";
+import { singlePost, remove, like, unlike } from "./apiPost";
 import { Link, Redirect } from "react-router-dom";
 import PostImage from "../images/post.jpg";
 import { isAuthenticated } from "../auth/index";
@@ -12,6 +12,9 @@ class SinglePost extends Component {
       loading: true,
       redirectToHome: false,
       message: "",
+      like: false,
+      likes: 0,
+      redirectToSignIn: false
     };
   }
 
@@ -21,9 +24,23 @@ class SinglePost extends Component {
       if (data.error) {
         this.setState({ redirectToHome: true });
       } else {
-        this.setState({ post: data, loading: false });
+        this.setState({
+          post: data,
+          loading: false,
+          like: this.checkLike(data.post_likes),
+          likes: data.post_likes.length,
+        });
       }
     });
+  };
+
+  checkLike = (post_likes) => {
+    const userId = isAuthenticated() ? isAuthenticated().user.id : 0;
+    let match = post_likes.some(function (o) {
+      return o["user_id"] === userId;
+    });
+
+    return match;
   };
 
   deletePost = () => {
@@ -45,7 +62,30 @@ class SinglePost extends Component {
     }
   };
 
-  renderPost = (post) => {
+  likeToggle = () => {
+    if(isAuthenticated()){
+      let callAPI = this.state.like ? unlike : like;
+
+      const userId = isAuthenticated().user.id;
+      const postId = this.state.post.id;
+      const token = isAuthenticated().token;
+  
+      callAPI(userId, token, postId).then((data) => {
+        if (data.error) {
+          console.log(data.error);
+        } else {
+          this.setState({
+            like: !this.state.like,
+            likes: data.length,
+          });
+        }
+      });
+    }else{
+      this.setState({redirectToSignIn:true});
+    }
+  };
+
+  renderPost = (post, like, likes) => {
     return (
       <div className="card-body">
         <img
@@ -55,6 +95,24 @@ class SinglePost extends Component {
           onError={(i) => (i.target.src = `${PostImage}`)}
           alt={post.title}
         />
+        {like ? (
+          <h3
+          onClick={() => {
+            this.likeToggle();
+          }}
+        >
+          <i className="fa fa-thumbs-up text-info bg-dark" style={{padding:'10px', borderRadius:'50%'}}/> {likes} like
+        </h3>
+        ) : (
+          <h3
+          onClick={() => {
+            this.likeToggle();
+          }}
+        >
+          <i className="fa fa-thumbs-up bg-dark" style={{padding:'10px', borderRadius:'50%'}}/> {likes} like
+        </h3>
+        )}
+        
         <p className="card-text">{post.body}</p>
         <br />
         <p className="font-italic mark">
@@ -89,11 +147,13 @@ class SinglePost extends Component {
   };
 
   render() {
-    const { post, loading, redirectToHome } = this.state;
+    const { post, like, likes, loading, redirectToHome, redirectToSignIn } = this.state;
 
     if (redirectToHome) {
       return <Redirect to="/" />;
-    } else {
+    } else if(redirectToSignIn){
+      return <Redirect to="/signin"/>;
+    }else{
       return (
         <div className="container">
           {loading ? (
@@ -103,7 +163,7 @@ class SinglePost extends Component {
           ) : (
             <div>
               <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
-              {this.renderPost(post)}
+              {this.renderPost(post, like, likes)}
             </div>
           )}
         </div>

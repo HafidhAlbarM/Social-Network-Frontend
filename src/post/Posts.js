@@ -27,8 +27,8 @@ class Posts extends Component {
         <div className="row">
           {posts.map((post, index) => {
             return (
-              <div className="col-md-4">
-                <div className="card" key={index}>
+              <div className="col-md-4" key={index}>
+                <div className="card">
                   <div className="card-body">
                     <img
                       style={{ height: "200px", width: "100%" }}

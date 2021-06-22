@@ -58,17 +58,6 @@ class Profile extends Component {
     });
   };
 
-  loadPosts = (userId) => {
-    const token = isAuthenticated().token;
-    listByUser(userId, token).then((data) => {
-      if (data.error) {
-        console.log(data.error);
-      } else {
-        this.setState({ posts: data });
-      }
-    });
-  };
-
   componentDidMount() {
     this._isMounted = true;
 
@@ -84,6 +73,17 @@ class Profile extends Component {
       this.init(this.props.match.params.userId);
     }
   }
+
+  loadPosts = (userId) => {
+    const token = isAuthenticated().token;
+    listByUser(userId, token).then((data) => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ posts: data });
+      }
+    });
+  };
 
   render() {
     const { redirectToSignIn, user, posts } = this.state;
